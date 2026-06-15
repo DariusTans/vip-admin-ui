@@ -33,8 +33,8 @@ function fmt(iso: string) {
 // ─── Guard Status Badge ───────────────────────────────────────────────────────
 function GuardStatusBadge({ status }: { status: Guard['status'] }) {
   const map = {
-    'on-duty':  { label: 'ปฏิบัติหน้าที่', dot: 'bg-success', text: 'text-success' },
-    'break':    { label: 'พักงาน',          dot: 'bg-warning', text: 'text-warning' },
+    'on-duty':  { label: 'ปฏิบัติหน้าที่', dot: 'bg-success',          text: 'text-success' },
+    'break':    { label: 'พักงาน',          dot: 'bg-warning',          text: 'text-warning' },
     'off-duty': { label: 'หยุดงาน',         dot: 'bg-muted-foreground', text: 'text-muted-foreground' },
   }
   const { label, dot, text } = map[status]
@@ -49,10 +49,10 @@ function GuardStatusBadge({ status }: { status: Guard['status'] }) {
 // ─── Round Status Badge ───────────────────────────────────────────────────────
 function RoundBadge({ status }: { status: PatrolRound['status'] }) {
   const map = {
-    'completed':   { label: 'สำเร็จ',      cls: 'bg-success-soft text-success' },
-    'in-progress': { label: 'กำลังตรวจ',   cls: 'bg-primary-soft text-primary' },
-    'missed':      { label: 'พลาด',         cls: 'bg-destructive-soft text-destructive' },
-    'upcoming':    { label: 'รอดำเนินการ', cls: 'bg-muted text-muted-foreground' },
+    'completed':   { label: 'สำเร็จ',       cls: 'bg-success-soft text-success' },
+    'in-progress': { label: 'กำลังตรวจ',    cls: 'bg-primary-soft text-primary' },
+    'missed':      { label: 'พลาด',          cls: 'bg-destructive-soft text-destructive' },
+    'upcoming':    { label: 'รอดำเนินการ',  cls: 'bg-muted text-muted-foreground' },
   }
   const { label, cls } = map[status]
   return (
@@ -65,9 +65,9 @@ function RoundBadge({ status }: { status: PatrolRound['status'] }) {
 // ─── Incident Badge ───────────────────────────────────────────────────────────
 function SeverityBadge({ severity }: { severity: IncidentSeverity }) {
   const map = {
-    high:   { label: 'สูง',    cls: 'bg-destructive-soft text-destructive' },
-    medium: { label: 'กลาง',   cls: 'bg-warning-soft text-warning' },
-    low:    { label: 'ต่ำ',    cls: 'bg-success-soft text-success' },
+    high:   { label: 'สูง',  cls: 'bg-destructive-soft text-destructive' },
+    medium: { label: 'กลาง', cls: 'bg-warning-soft text-warning' },
+    low:    { label: 'ต่ำ',  cls: 'bg-success-soft text-success' },
   }
   const { label, cls } = map[severity]
   return (
@@ -102,14 +102,14 @@ function StatCard({ label, value, sub, icon, colorClass, bgClass }: {
   icon: React.ReactNode; colorClass: string; bgClass: string
 }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">{label}</p>
-          <p className="mt-1 text-3xl font-bold text-foreground">{value}</p>
-          {sub && <p className="mt-1 text-xs text-muted-foreground">{sub}</p>}
+    <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <p className="text-xs text-muted-foreground">{label}</p>
+          <p className="mt-1 text-2xl font-bold text-foreground">{value}</p>
+          {sub && <p className="mt-0.5 hidden text-xs text-muted-foreground sm:block">{sub}</p>}
         </div>
-        <div className={cn('flex size-11 items-center justify-center rounded-xl', bgClass, colorClass)}>
+        <div className={cn('flex size-10 shrink-0 items-center justify-center rounded-xl', bgClass, colorClass)}>
           {icon}
         </div>
       </div>
@@ -121,22 +121,20 @@ function StatCard({ label, value, sub, icon, colorClass, bgClass }: {
 function GuardCard({ guard }: { guard: Guard }) {
   const pct = Math.round((guard.roundsToday / guard.roundsTarget) * 100)
   return (
-    <div className="flex items-center gap-4 rounded-xl border border-border bg-card p-4 shadow-sm hover:border-primary/40 transition-colors cursor-pointer">
-      {/* Avatar + ring */}
+    <div className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 shadow-sm hover:border-primary/40 transition-colors cursor-pointer lg:gap-4 lg:p-4">
       <div className="relative shrink-0">
-        <ProgressRing value={guard.roundsToday} max={guard.roundsTarget} size={52} />
+        <ProgressRing value={guard.roundsToday} max={guard.roundsTarget} size={48} />
         <div className="absolute inset-0 flex items-center justify-center">
           <span className="text-[10px] font-bold text-primary">{pct}%</span>
         </div>
       </div>
-      {/* Info */}
       <div className="min-w-0 flex-1">
         <div className="flex items-center justify-between gap-2">
           <p className="truncate text-sm font-semibold text-foreground">{guard.name}</p>
           <GuardStatusBadge status={guard.status} />
         </div>
         <p className="mt-0.5 text-xs text-muted-foreground">{guard.code} · {guard.zone}</p>
-        <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
+        <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
           <span className="flex items-center gap-1">
             <CheckCircle2 className="size-3 text-success" />
             {guard.roundsToday}/{guard.roundsTarget} รอบ
@@ -145,7 +143,7 @@ function GuardCard({ guard }: { guard: Guard }) {
             <Clock className="size-3" />
             {fmt(guard.lastSeen)}
           </span>
-          <span className="flex items-center gap-1">
+          <span className="hidden items-center gap-1 sm:flex">
             <Phone className="size-3" />
             {guard.phone}
           </span>
@@ -194,37 +192,38 @@ export function PatrolPage() {
   const roundPct = Math.round((s.roundsCompleted / s.roundsTotal) * 100)
 
   const tabs: { key: Tab; label: string; icon: React.ReactNode }[] = [
-    { key: 'overview',  label: 'ภาพรวม',        icon: <Activity className="size-4" /> },
-    { key: 'guards',    label: 'เจ้าหน้าที่',    icon: <Users className="size-4" /> },
-    { key: 'rounds',    label: 'รายการตรวจ',     icon: <CircleDot className="size-4" /> },
-    { key: 'incidents', label: 'เหตุการณ์',      icon: <AlertTriangle className="size-4" /> },
+    { key: 'overview',  label: 'ภาพรวม',     icon: <Activity className="size-4" /> },
+    { key: 'guards',    label: 'เจ้าหน้าที่', icon: <Users className="size-4" /> },
+    { key: 'rounds',    label: 'รายการตรวจ',  icon: <CircleDot className="size-4" /> },
+    { key: 'incidents', label: 'เหตุการณ์',   icon: <AlertTriangle className="size-4" /> },
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 lg:space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">{t('nav.patrol')}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <h1 className="text-xl font-bold text-foreground lg:text-2xl">{t('nav.patrol')}</h1>
+          <p className="mt-0.5 text-xs text-muted-foreground lg:text-sm">
             {new Date().toLocaleDateString('th-TH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="flex items-center gap-1.5 rounded-full border border-success/40 bg-success-soft px-3 py-1 text-xs font-medium text-success">
+          <span className="flex items-center gap-1.5 rounded-full border border-success/40 bg-success-soft px-2.5 py-1 text-xs font-medium text-success">
             <span className="size-1.5 rounded-full bg-success animate-pulse" />
-            ระบบทำงานปกติ
+            <span className="hidden sm:inline">ระบบทำงานปกติ</span>
+            <span className="sm:hidden">ปกติ</span>
           </span>
         </div>
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4 lg:gap-4">
         <StatCard
           label="เจ้าหน้าที่ปฏิบัติหน้าที่"
           value={`${s.guardsOnDuty}/${s.guardsTotal}`}
           sub="กำลังลาดตระเวน"
-          icon={<Shield className="size-5" />}
+          icon={<Shield className="size-4 lg:size-5" />}
           colorClass="text-primary"
           bgClass="bg-primary-soft"
         />
@@ -232,7 +231,7 @@ export function PatrolPage() {
           label="รอบตรวจสำเร็จ"
           value={`${s.roundsCompleted}/${s.roundsTotal}`}
           sub={`${roundPct}% ของเป้าหมาย`}
-          icon={<CheckCircle2 className="size-5" />}
+          icon={<CheckCircle2 className="size-4 lg:size-5" />}
           colorClass="text-success"
           bgClass="bg-success-soft"
         />
@@ -240,7 +239,7 @@ export function PatrolPage() {
           label="รอบตรวจพลาด"
           value={s.missedRounds}
           sub="ต้องตรวจสอบ"
-          icon={<XCircle className="size-5" />}
+          icon={<XCircle className="size-4 lg:size-5" />}
           colorClass="text-destructive"
           bgClass="bg-destructive-soft"
         />
@@ -248,7 +247,7 @@ export function PatrolPage() {
           label="เหตุการณ์เปิดอยู่"
           value={s.incidentsOpen}
           sub={`จากทั้งหมด ${s.incidents} เหตุการณ์`}
-          icon={<AlertTriangle className="size-5" />}
+          icon={<AlertTriangle className="size-4 lg:size-5" />}
           colorClass="text-warning"
           bgClass="bg-warning-soft"
         />
@@ -261,14 +260,14 @@ export function PatrolPage() {
             key={key}
             onClick={() => setTab(key)}
             className={cn(
-              'flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all',
+              'flex flex-1 items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-xs font-medium transition-all sm:gap-2 sm:px-3 sm:text-sm',
               tab === key
                 ? 'bg-card text-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground',
             )}
           >
             {icon}
-            <span className="hidden ms:inline">{label}</span>
+            <span className="hidden sm:inline">{label}</span>
             {key === 'incidents' && s.incidentsOpen > 0 && (
               <span className="flex size-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">
                 {s.incidentsOpen}
@@ -281,16 +280,16 @@ export function PatrolPage() {
       {/* ── Tab: Overview ── */}
       {tab === 'overview' && (
         <div className="grid gap-4 xl:grid-cols-3">
-          {/* Zone map placeholder */}
-          <div className="xl:col-span-2 rounded-xl border border-border bg-card p-5 shadow-sm">
+          {/* Zone map */}
+          <div className="xl:col-span-2 rounded-xl border border-border bg-card p-4 shadow-sm lg:p-5">
             <p className="font-semibold text-foreground">แผนที่โซนลาดตระเวน</p>
             <p className="mb-4 text-xs text-muted-foreground">สถานะแต่ละโซนแบบ realtime</p>
-            <div className="grid grid-cols-1 gap-3 ms:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {[
                 { zone: 'โซน A', label: 'ประตูหน้า', guards: 2, status: 'on-duty' as const, lastRound: '11:45' },
                 { zone: 'โซน B', label: 'อาคาร 1-3', guards: 1, status: 'on-duty' as const, lastRound: '11:18' },
-                { zone: 'โซน C', label: 'ที่จอดรถ', guards: 1, status: 'break' as const, lastRound: '10:30' },
-                { zone: 'โซน D', label: 'โกดัง', guards: 1, status: 'on-duty' as const, lastRound: '11:35' },
+                { zone: 'โซน C', label: 'ที่จอดรถ',  guards: 1, status: 'break' as const,   lastRound: '10:30' },
+                { zone: 'โซน D', label: 'โกดัง',      guards: 1, status: 'on-duty' as const, lastRound: '11:35' },
                 { zone: 'โซน E', label: 'หลังอาคาร', guards: 0, status: 'off-duty' as const, lastRound: '07:00' },
               ].map(z => (
                 <div
@@ -324,7 +323,7 @@ export function PatrolPage() {
           </div>
 
           {/* Open incidents summary */}
-          <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+          <div className="rounded-xl border border-border bg-card p-4 shadow-sm lg:p-5">
             <div className="mb-3 flex items-center justify-between">
               <p className="font-semibold text-foreground">เหตุการณ์ล่าสุด</p>
               <span className="rounded-full bg-destructive-soft px-2 py-0.5 text-xs font-medium text-destructive">
@@ -352,7 +351,9 @@ export function PatrolPage() {
             <p className="font-semibold text-foreground">รายการตรวจวันนี้</p>
             <p className="text-xs text-muted-foreground">สำเร็จ {s.roundsCompleted} / {s.roundsTotal} รอบ</p>
           </div>
-          <div className="overflow-x-auto">
+
+          {/* Desktop table */}
+          <div className="hidden overflow-x-auto md:block">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border bg-muted/40">
@@ -379,13 +380,30 @@ export function PatrolPage() {
                     <td className="px-4 py-3 text-muted-foreground">
                       {r.note ?? <span className="text-muted-foreground/40">—</span>}
                     </td>
-                    <td className="px-4 py-3">
-                      <RoundBadge status={r.status} />
-                    </td>
+                    <td className="px-4 py-3"><RoundBadge status={r.status} /></td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile cards */}
+          <div className="divide-y divide-border md:hidden">
+            {mockRounds.map(r => (
+              <div key={r.id} className="flex items-start justify-between gap-3 p-4">
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium text-foreground text-sm">{r.guardName}</p>
+                  <p className="text-xs text-muted-foreground">{r.guardCode} · {r.zone}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{r.checkpoint}</p>
+                  <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground">
+                    <span>กำหนด: {fmt(r.scheduledAt)}</span>
+                    {r.completedAt && <span>เสร็จ: {fmt(r.completedAt)}</span>}
+                  </div>
+                  {r.note && <p className="mt-0.5 text-xs text-muted-foreground italic">{r.note}</p>}
+                </div>
+                <RoundBadge status={r.status} />
+              </div>
+            ))}
           </div>
         </div>
       )}

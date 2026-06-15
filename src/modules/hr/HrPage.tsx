@@ -29,9 +29,9 @@ function EmployeeStatusBadge({ status }: { status: Employee['status'] }) {
 
 function ContractBadge({ type }: { type: Employee['contractType'] }) {
   const map = {
-    permanent:  { label: 'ประจำ',       cls: 'text-primary' },
-    contract:   { label: 'สัญญาจ้าง',  cls: 'text-warning' },
-    probation:  { label: 'ทดลองงาน',   cls: 'text-muted-foreground' },
+    permanent:  { label: 'ประจำ',      cls: 'text-primary' },
+    contract:   { label: 'สัญญาจ้าง', cls: 'text-warning' },
+    probation:  { label: 'ทดลองงาน',  cls: 'text-muted-foreground' },
   }
   const { label, cls } = map[type]
   return <span className={cn('text-xs font-medium', cls)}>{label}</span>
@@ -97,14 +97,14 @@ function StatCard({ label, value, sub, icon, colorClass, bgClass }: {
   icon: React.ReactNode; colorClass: string; bgClass: string
 }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">{label}</p>
-          <p className="mt-1 text-3xl font-bold text-foreground">{value}</p>
-          {sub && <p className="mt-1 text-xs text-muted-foreground">{sub}</p>}
+    <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <p className="text-xs text-muted-foreground">{label}</p>
+          <p className="mt-1 text-2xl font-bold text-foreground">{value}</p>
+          {sub && <p className="mt-0.5 text-xs text-muted-foreground">{sub}</p>}
         </div>
-        <div className={cn('flex size-11 items-center justify-center rounded-xl', bgClass, colorClass)}>
+        <div className={cn('flex size-10 shrink-0 items-center justify-center rounded-xl', bgClass, colorClass)}>
           {icon}
         </div>
       </div>
@@ -133,38 +133,39 @@ export function HrPage() {
   )
 
   const tabs: { key: Tab; label: string; icon: React.ReactNode; badge?: number }[] = [
-    { key: 'overview',     label: 'ภาพรวม',        icon: <TrendingUp className="size-4" /> },
-    { key: 'employees',    label: 'พนักงาน',        icon: <Users className="size-4" /> },
-    { key: 'leave',        label: 'ใบลา',           icon: <Calendar className="size-4" />, badge: mockHrStats.pendingLeave },
-    { key: 'departments',  label: 'แผนก',           icon: <Building2 className="size-4" /> },
+    { key: 'overview',    label: 'ภาพรวม',  icon: <TrendingUp className="size-4" /> },
+    { key: 'employees',   label: 'พนักงาน', icon: <Users className="size-4" /> },
+    { key: 'leave',       label: 'ใบลา',    icon: <Calendar className="size-4" />, badge: mockHrStats.pendingLeave },
+    { key: 'departments', label: 'แผนก',    icon: <Building2 className="size-4" /> },
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 lg:space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">ทรัพยากรบุคคล</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <h1 className="text-xl font-bold text-foreground lg:text-2xl">ทรัพยากรบุคคล</h1>
+          <p className="mt-0.5 text-xs text-muted-foreground lg:text-sm">
             {new Date().toLocaleDateString('th-TH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
         </div>
-        <button className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-sm hover:opacity-90 transition-opacity">
-          <Plus className="size-4" />
-          เพิ่มพนักงาน
+        <button className="flex shrink-0 items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-primary-foreground shadow-sm hover:opacity-90 transition-opacity lg:gap-2 lg:px-4 lg:py-2.5 lg:text-sm">
+          <Plus className="size-3.5 lg:size-4" />
+          <span className="hidden sm:inline">เพิ่มพนักงาน</span>
+          <span className="sm:hidden">เพิ่ม</span>
         </button>
       </div>
 
-      {/* Stat cards */}
-      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+      {/* Stat cards — 2 col on mobile, 4 on xl */}
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4 lg:gap-4">
         <StatCard label="พนักงานทั้งหมด" value={mockHrStats.totalEmployees} sub={`ปฏิบัติงาน ${mockHrStats.active} คน`}
-          icon={<Users className="size-5" />} colorClass="text-primary" bgClass="bg-primary-soft" />
+          icon={<Users className="size-4 lg:size-5" />} colorClass="text-primary" bgClass="bg-primary-soft" />
         <StatCard label="ลางานวันนี้" value={mockHrStats.onLeave} sub="ใบลาอนุมัติแล้ว"
-          icon={<UserMinus className="size-5" />} colorClass="text-warning" bgClass="bg-warning-soft" />
+          icon={<UserMinus className="size-4 lg:size-5" />} colorClass="text-warning" bgClass="bg-warning-soft" />
         <StatCard label="รออนุมัติใบลา" value={mockHrStats.pendingLeave} sub="ต้องดำเนินการ"
-          icon={<Hourglass className="size-5" />} colorClass="text-destructive" bgClass="bg-destructive-soft" />
-        <StatCard label="สัญญาจ้างใกล้หมด" value={mockHrStats.contractEndingSoon} sub="ภายใน 30 วัน"
-          icon={<AlertCircle className="size-5" />} colorClass="text-warning" bgClass="bg-warning-soft" />
+          icon={<Hourglass className="size-4 lg:size-5" />} colorClass="text-destructive" bgClass="bg-destructive-soft" />
+        <StatCard label="สัญญาใกล้หมด" value={mockHrStats.contractEndingSoon} sub="ภายใน 30 วัน"
+          icon={<AlertCircle className="size-4 lg:size-5" />} colorClass="text-warning" bgClass="bg-warning-soft" />
       </div>
 
       {/* Tabs */}
@@ -172,12 +173,12 @@ export function HrPage() {
         {tabs.map(({ key, label, icon, badge }) => (
           <button key={key} onClick={() => setTab(key)}
             className={cn(
-              'flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all',
+              'flex flex-1 items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-xs font-medium transition-all sm:px-3 sm:text-sm',
               tab === key ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
             )}
           >
             {icon}
-            <span className="hidden ms:inline">{label}</span>
+            <span className="hidden sm:inline">{label}</span>
             {badge != null && badge > 0 && (
               <span className="flex size-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-white">
                 {badge}
@@ -191,7 +192,7 @@ export function HrPage() {
       {tab === 'overview' && (
         <div className="grid gap-4 xl:grid-cols-3">
           {/* Department breakdown */}
-          <div className="xl:col-span-2 rounded-xl border border-border bg-card p-5 shadow-sm">
+          <div className="xl:col-span-2 rounded-xl border border-border bg-card p-4 shadow-sm lg:p-5">
             <p className="font-semibold text-foreground">อัตรากำลังตามแผนก</p>
             <p className="mb-4 text-xs text-muted-foreground">จำนวนพนักงานแต่ละฝ่าย</p>
             <div className="space-y-3">
@@ -200,18 +201,18 @@ export function HrPage() {
                 return (
                   <div key={d.id} className="space-y-1.5">
                     <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-2">
-                        <Building2 className="size-3.5 text-muted-foreground" />
-                        <span className="text-foreground">{d.name}</span>
-                        <span className="text-xs text-muted-foreground">หัวหน้า: {d.headName}</span>
+                      <div className="flex min-w-0 items-center gap-2">
+                        <Building2 className="size-3.5 shrink-0 text-muted-foreground" />
+                        <span className="truncate text-foreground">{d.name}</span>
+                        <span className="hidden text-xs text-muted-foreground sm:inline">หัวหน้า: {d.headName}</span>
                       </div>
-                      <span className="font-semibold text-foreground">{d.employeeCount} คน</span>
+                      <span className="shrink-0 font-semibold text-foreground">{d.employeeCount} คน</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="h-2 flex-1 rounded-full bg-muted overflow-hidden">
                         <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
                       </div>
-                      <span className="w-8 text-right text-xs text-muted-foreground">{pct}%</span>
+                      <span className="w-8 shrink-0 text-right text-xs text-muted-foreground">{pct}%</span>
                     </div>
                   </div>
                 )
@@ -220,7 +221,7 @@ export function HrPage() {
           </div>
 
           {/* Timeline events */}
-          <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+          <div className="rounded-xl border border-border bg-card p-4 shadow-sm lg:p-5">
             <p className="font-semibold text-foreground">เหตุการณ์ HR ล่าสุด</p>
             <p className="mb-4 text-xs text-muted-foreground">การเปลี่ยนแปลงบุคลากร</p>
             <div className="relative space-y-4 pl-4 before:absolute before:left-3.5 before:top-0 before:h-full before:w-px before:bg-border">
@@ -245,16 +246,19 @@ export function HrPage() {
       {tab === 'employees' && (
         <div className="rounded-xl border border-border bg-card shadow-sm">
           {/* Toolbar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4">
-            <p className="font-semibold text-foreground">รายชื่อพนักงาน</p>
-            <div className="flex items-center gap-2">
+          <div className="space-y-3 border-b border-border p-4">
+            <div className="flex items-center justify-between gap-3">
+              <p className="font-semibold text-foreground">รายชื่อพนักงาน</p>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
                 <input value={search} onChange={e => setSearch(e.target.value)}
-                  placeholder="ค้นหาชื่อ รหัส หรือแผนก..."
-                  className="h-9 w-56 rounded-lg border border-input bg-background pl-8 pr-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  placeholder="ค้นหา..."
+                  className="h-8 w-40 rounded-lg border border-input bg-background pl-8 pr-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring sm:w-56"
                 />
               </div>
+            </div>
+            {/* Status filter chips */}
+            <div className="flex flex-wrap gap-1.5">
               {(['all', 'active', 'on-leave', 'terminated'] as const).map(s => (
                 <button key={s} onClick={() => setFilterStatus(s)}
                   className={cn(
@@ -267,8 +271,9 @@ export function HrPage() {
               ))}
             </div>
           </div>
-          {/* Table */}
-          <div className="overflow-x-auto">
+
+          {/* Desktop table */}
+          <div className="hidden overflow-x-auto md:block">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border bg-muted/40">
@@ -288,18 +293,35 @@ export function HrPage() {
                     <td className="px-4 py-3 text-muted-foreground">{e.department}</td>
                     <td className="px-4 py-3"><ContractBadge type={e.contractType} /></td>
                     <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{fmtDate(e.startDate)}</td>
-                    <td className="px-4 py-3">
-                      <LeaveQuotaBar used={e.annualLeaveRemaining} total={e.annualLeaveTotal} />
-                    </td>
+                    <td className="px-4 py-3"><LeaveQuotaBar used={e.annualLeaveRemaining} total={e.annualLeaveTotal} /></td>
                     <td className="px-4 py-3"><EmployeeStatusBadge status={e.status} /></td>
-                    <td className="px-4 py-3 text-muted-foreground">
-                      <ChevronRight className="size-4" />
-                    </td>
+                    <td className="px-4 py-3 text-muted-foreground"><ChevronRight className="size-4" /></td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+
+          {/* Mobile cards */}
+          <div className="divide-y divide-border md:hidden">
+            {filteredEmployees.map(e => (
+              <div key={e.id} className="flex items-center justify-between gap-3 p-4">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium text-foreground">{e.name}</p>
+                    <EmployeeStatusBadge status={e.status} />
+                  </div>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{e.code} · {e.department}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{e.position} · <ContractBadge type={e.contractType} /></p>
+                  <div className="mt-1.5">
+                    <LeaveQuotaBar used={e.annualLeaveRemaining} total={e.annualLeaveTotal} />
+                  </div>
+                </div>
+                <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
+              </div>
+            ))}
+          </div>
+
           <div className="border-t border-border px-4 py-3 text-xs text-muted-foreground">
             แสดง {filteredEmployees.length} จาก {mockEmployees.length} รายการ
           </div>
@@ -310,8 +332,8 @@ export function HrPage() {
       {tab === 'leave' && (
         <div className="space-y-4">
           {/* Quick filter */}
-          <div className="flex items-center gap-2">
-            <FileText className="size-4 text-muted-foreground" />
+          <div className="flex flex-wrap items-center gap-2">
+            <FileText className="size-4 shrink-0 text-muted-foreground" />
             {(['all', 'pending', 'approved', 'rejected'] as const).map(s => (
               <button key={s} onClick={() => setFilterLeave(s)}
                 className={cn(
@@ -324,7 +346,8 @@ export function HrPage() {
             ))}
           </div>
 
-          <div className="rounded-xl border border-border bg-card shadow-sm">
+          {/* Desktop table */}
+          <div className="hidden rounded-xl border border-border bg-card shadow-sm md:block">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
@@ -373,18 +396,51 @@ export function HrPage() {
               </table>
             </div>
           </div>
+
+          {/* Mobile cards */}
+          <div className="space-y-3 md:hidden">
+            {filteredLeave.map(l => (
+              <div key={l.id} className={cn(
+                'rounded-xl border border-border bg-card p-4 shadow-sm',
+                l.status === 'pending' && 'border-warning/40 bg-warning-soft/10',
+              )}>
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="font-medium text-foreground">{l.employeeName}</p>
+                    <p className="text-xs text-muted-foreground">{l.employeeCode} · {l.department}</p>
+                  </div>
+                  <LeaveStatusBadge status={l.status} />
+                </div>
+                <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                  <span><LeaveTypeBadge type={l.leaveType} /></span>
+                  <span>{fmtDate(l.startDate)}{l.days > 1 ? ` – ${fmtDate(l.endDate)}` : ''} ({l.days} วัน)</span>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{l.reason}</p>
+                {l.status === 'pending' && (
+                  <div className="mt-3 flex gap-2">
+                    <button className="flex-1 rounded-lg bg-success-soft py-1.5 text-xs font-medium text-success hover:opacity-80 transition-opacity">
+                      <BadgeCheck className="inline size-3 mr-0.5" />อนุมัติ
+                    </button>
+                    <button className="flex-1 rounded-lg bg-destructive-soft py-1.5 text-xs font-medium text-destructive hover:opacity-80 transition-opacity">
+                      ปฏิเสธ
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
       {/* ── Tab: Departments ── */}
       {tab === 'departments' && (
-        <div className="grid gap-4 ms:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 lg:gap-4">
           {mockDepartments.map(d => {
             const deptEmployees = mockEmployees.filter(e => e.department === d.name)
             const activeCount = deptEmployees.filter(e => e.status === 'active').length
             const onLeaveCount = deptEmployees.filter(e => e.status === 'on-leave').length
             return (
-              <div key={d.id} className="rounded-xl border border-border bg-card p-5 shadow-sm hover:border-primary/40 transition-colors cursor-pointer">
+              <div key={d.id} className="rounded-xl border border-border bg-card p-4 shadow-sm hover:border-primary/40 transition-colors cursor-pointer lg:p-5">
                 <div className="flex items-start justify-between">
                   <div className="flex size-10 items-center justify-center rounded-xl bg-primary-soft">
                     <Building2 className="size-5 text-primary" />
@@ -393,7 +449,7 @@ export function HrPage() {
                 </div>
                 <p className="mt-3 font-semibold text-foreground">{d.name}</p>
                 <p className="text-xs text-muted-foreground">หัวหน้า: {d.headName}</p>
-                <div className="mt-4 flex items-center gap-4 text-xs">
+                <div className="mt-3 flex flex-wrap items-center gap-3 text-xs">
                   <span className="flex items-center gap-1 text-foreground">
                     <Users className="size-3 text-primary" />
                     <strong>{d.employeeCount}</strong> คน
@@ -407,7 +463,6 @@ export function HrPage() {
                     </span>
                   )}
                 </div>
-                {/* Mini employee avatars */}
                 {deptEmployees.length > 0 && (
                   <div className="mt-3 flex -space-x-1.5">
                     {deptEmployees.slice(0, 5).map(e => (

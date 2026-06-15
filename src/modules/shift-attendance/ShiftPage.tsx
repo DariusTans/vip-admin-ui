@@ -40,7 +40,7 @@ function StatCard({
   }[variant]
 
   return (
-    <div className={cn('rounded-xl p-4 flex flex-col gap-3', variantCls)}>
+    <div className={cn('rounded-xl p-4 flex flex-col gap-2', variantCls)}>
       <div className="flex items-start justify-between">
         <div className={cn('p-2 rounded-lg', iconCls)}>
           <Icon className="size-4" />
@@ -54,9 +54,9 @@ function StatCard({
         )}
       </div>
       <div>
-        <p className="text-2xl font-semibold text-foreground">{value}</p>
+        <p className="text-xl font-semibold text-foreground lg:text-2xl">{value}</p>
         <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
-        {sub && <p className="text-xs text-muted-foreground/70 mt-0.5">{sub}</p>}
+        {sub && <p className="hidden text-xs text-muted-foreground/70 mt-0.5 sm:block">{sub}</p>}
       </div>
     </div>
   )
@@ -127,8 +127,8 @@ function WeeklyChart() {
   const maxVal = Math.max(...mockWeeklyHours.map(d => Math.max(d.scheduled, d.actual)))
 
   return (
-    <div className="bg-card border border-border rounded-xl p-5">
-      <div className="flex items-center justify-between mb-4">
+    <div className="bg-card border border-border rounded-xl p-4 lg:p-5">
+      <div className="flex flex-wrap items-start justify-between gap-2 mb-4">
         <div>
           <h3 className="text-sm font-semibold text-foreground">ชั่วโมงทำงานรายสัปดาห์</h3>
           <p className="text-xs text-muted-foreground">9–15 มิ.ย. 2026 · ทั้งองค์กร</p>
@@ -186,7 +186,7 @@ function WeeklyChart() {
           {mockWeeklyHours.map((d, i) => (
             <div key={i} className="flex-1 text-center">
               <p className="text-[10px] font-medium text-foreground">{d.day}</p>
-              <p className="text-[9px] text-muted-foreground">{d.date}</p>
+              <p className="hidden text-[9px] text-muted-foreground sm:block">{d.date}</p>
             </div>
           ))}
         </div>
@@ -211,10 +211,10 @@ function ShiftDonut() {
   let cumulative = 0
 
   return (
-    <div className="bg-card border border-border rounded-xl p-5">
+    <div className="bg-card border border-border rounded-xl p-4 lg:p-5">
       <h3 className="text-sm font-semibold text-foreground mb-4">การกระจายกะวันนี้</h3>
       <div className="flex items-center gap-6">
-        <svg width="112" height="112" viewBox="0 0 112 112">
+        <svg width="112" height="112" viewBox="0 0 112 112" className="shrink-0">
           <circle cx={cx} cy={cy} r={r} fill="none" strokeWidth={strokeW} className="stroke-muted" />
           {slices.map((s, i) => {
             const fraction = s.value / total
@@ -243,13 +243,13 @@ function ShiftDonut() {
         <div className="flex flex-col gap-2">
           {slices.map((s, i) => (
             <div key={i} className="flex items-center gap-2">
-              <span className={cn('inline-block w-2.5 h-2.5 rounded-sm', {
+              <span className={cn('inline-block w-2.5 h-2.5 rounded-sm shrink-0', {
                 'bg-primary': i === 0,
                 'bg-warning': i === 1,
                 'bg-muted-foreground': i === 2,
               })} />
               <span className="text-xs text-muted-foreground">{s.label}</span>
-              <span className="text-xs font-semibold text-foreground ml-auto pl-4">{s.value}</span>
+              <span className="text-xs font-semibold text-foreground ml-auto pl-2">{s.value}</span>
               <span className="text-[10px] text-muted-foreground">({Math.round(s.value / total * 100)}%)</span>
             </div>
           ))}
@@ -269,7 +269,7 @@ function PunchTimeline({ record }: { record: AttendanceRecord }) {
     <div className="flex items-center gap-2 text-xs">
       <span className="text-muted-foreground w-10 shrink-0">{record.scheduledIn}</span>
       <div className="flex-1 flex items-center gap-1">
-        <div className="h-0.5 w-8 bg-border rounded" />
+        <div className="h-0.5 w-6 bg-border rounded" />
         <div className={cn('size-2.5 rounded-full shrink-0 border-2', {
           'bg-success border-success': record.punchIn && !isLate,
           'bg-warning border-warning': record.punchIn && isLate,
@@ -284,7 +284,7 @@ function PunchTimeline({ record }: { record: AttendanceRecord }) {
           'bg-primary border-primary': record.punchOut && isOT,
           'bg-muted border-border':    !record.punchOut,
         })} />
-        <div className="h-0.5 w-8 bg-border rounded" />
+        <div className="h-0.5 w-6 bg-border rounded" />
       </div>
       <span className="text-muted-foreground w-10 shrink-0 text-right">{record.scheduledOut}</span>
     </div>
@@ -303,7 +303,7 @@ function ScheduleGantt() {
   }
 
   return (
-    <div className="bg-card border border-border rounded-xl p-5">
+    <div className="bg-card border border-border rounded-xl p-4 lg:p-5">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-sm font-semibold text-foreground">ตาราง Shift วันนี้</h3>
@@ -314,46 +314,50 @@ function ScheduleGantt() {
         </button>
       </div>
 
-      <div className="flex text-[9px] text-muted-foreground mb-1 pl-[7.5rem]">
-        {[0, 6, 12, 18, 23].map(h => (
-          <div key={h} className="flex-1">{String(h).padStart(2, '0')}:00</div>
-        ))}
-      </div>
-      <div className="h-px bg-border mb-2 ml-30" />
+      <div className="overflow-x-auto">
+        <div className="min-w-[480px]">
+          <div className="flex text-[9px] text-muted-foreground mb-1 pl-[7.5rem]">
+            {[0, 6, 12, 18, 23].map(h => (
+              <div key={h} className="flex-1">{String(h).padStart(2, '0')}:00</div>
+            ))}
+          </div>
+          <div className="h-px bg-border mb-2 ml-30" />
 
-      <div className="space-y-2 overflow-y-auto max-h-60">
-        {today.map(a => {
-          const startX = timeToX(a.startTime)
-          let endX = timeToX(a.endTime)
-          if (endX <= startX) endX = 100
-          const width = Math.max(endX - startX, 5)
+          <div className="space-y-2 overflow-y-auto max-h-60">
+            {today.map(a => {
+              const startX = timeToX(a.startTime)
+              let endX = timeToX(a.endTime)
+              if (endX <= startX) endX = 100
+              const width = Math.max(endX - startX, 5)
 
-          return (
-            <div key={a.id} className="flex items-center gap-3">
-              <div className="w-28 shrink-0">
-                <p className="text-xs font-medium text-foreground truncate">{a.employeeName}</p>
-                <p className="text-[10px] text-muted-foreground truncate">{a.shiftName}</p>
-              </div>
-              <div className="flex-1 relative h-6 bg-muted/20 rounded overflow-hidden">
-                <div className="absolute inset-0 flex">
-                  {hours.map(h => (
-                    <div key={h} className="flex-1 border-r border-border/20 last:border-r-0" />
-                  ))}
+              return (
+                <div key={a.id} className="flex items-center gap-3">
+                  <div className="w-28 shrink-0">
+                    <p className="text-xs font-medium text-foreground truncate">{a.employeeName}</p>
+                    <p className="text-[10px] text-muted-foreground truncate">{a.shiftName}</p>
+                  </div>
+                  <div className="flex-1 relative h-6 bg-muted/20 rounded overflow-hidden">
+                    <div className="absolute inset-0 flex">
+                      {hours.map(h => (
+                        <div key={h} className="flex-1 border-r border-border/20 last:border-r-0" />
+                      ))}
+                    </div>
+                    <div
+                      className={cn('absolute top-1 h-4 rounded-sm flex items-center px-1.5 text-[10px] font-medium text-white', {
+                        'bg-primary':          a.shiftType === 'morning',
+                        'bg-warning':          a.shiftType === 'afternoon',
+                        'bg-muted-foreground': a.shiftType === 'night',
+                      })}
+                      style={{ left: `${startX}%`, width: `${width}%` }}
+                    >
+                      {width > 8 ? `${a.startTime}–${a.endTime}` : ''}
+                    </div>
+                  </div>
                 </div>
-                <div
-                  className={cn('absolute top-1 h-4 rounded-sm flex items-center px-1.5 text-[10px] font-medium text-white', {
-                    'bg-primary':          a.shiftType === 'morning',
-                    'bg-warning':          a.shiftType === 'afternoon',
-                    'bg-muted-foreground': a.shiftType === 'night',
-                  })}
-                  style={{ left: `${startX}%`, width: `${width}%` }}
-                >
-                  {width > 8 ? `${a.startTime}–${a.endTime}` : ''}
-                </div>
-              </div>
-            </div>
-          )
-        })}
+              )
+            })}
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -370,8 +374,8 @@ const TABS: { id: TabId; label: string }[] = [
 ]
 
 export function ShiftPage() {
-  const [activeTab, setActiveTab]     = useState<TabId>('overview')
-  const [searchQ, setSearchQ]         = useState('')
+  const [activeTab, setActiveTab]       = useState<TabId>('overview')
+  const [searchQ, setSearchQ]           = useState('')
   const [filterStatus, setFilterStatus] = useState<AttendanceStatus | 'all'>('all')
   const [filterShift, setFilterShift]   = useState<'all' | 'morning' | 'afternoon' | 'night'>('all')
 
@@ -388,18 +392,18 @@ export function ShiftPage() {
   })
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-4 lg:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold text-foreground">Shift &amp; Time Attendant</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
+          <h1 className="text-xl font-bold text-foreground lg:text-2xl">Shift &amp; Time Attendant</h1>
+          <p className="mt-0.5 text-xs text-muted-foreground lg:text-sm">
             จัดการตาราง Shift และบันทึกเวลาทำงาน · อัปเดต 15 มิ.ย. 2026
           </p>
         </div>
-        <button className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg border border-border text-muted-foreground hover:bg-muted/50 transition-colors">
+        <button className="flex shrink-0 items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-xs text-muted-foreground hover:bg-muted/50 transition-colors lg:text-sm lg:px-4">
           <CalendarCheck className="size-4" />
-          ส่งออกรายงาน
+          <span className="hidden sm:inline">ส่งออกรายงาน</span>
         </button>
       </div>
 
@@ -438,13 +442,13 @@ export function ShiftPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 border-b border-border">
+      <div className="flex gap-1 border-b border-border overflow-x-auto">
         {TABS.map(t => (
           <button
             key={t.id}
             onClick={() => setActiveTab(t.id)}
             className={cn(
-              'px-4 py-2 text-sm font-medium border-b-2 transition-colors',
+              'whitespace-nowrap px-3 py-2 text-sm font-medium border-b-2 transition-colors lg:px-4',
               activeTab === t.id
                 ? 'border-primary text-primary'
                 : 'border-transparent text-muted-foreground hover:text-foreground',
@@ -458,11 +462,11 @@ export function ShiftPage() {
       {/* ── Overview ─────────────────────────────────────────── */}
       {activeTab === 'overview' && (
         <div className="space-y-4">
-          <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
             <ShiftDonut />
 
             {/* Punch summary today */}
-            <div className="bg-card border border-border rounded-xl p-5 xl:col-span-2">
+            <div className="bg-card border border-border rounded-xl p-4 lg:p-5 lg:col-span-2">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h3 className="text-sm font-semibold text-foreground">สรุปการลงเวลาวันนี้</h3>
@@ -517,13 +521,14 @@ export function ShiftPage() {
       {/* ── Attendance ───────────────────────────────────────── */}
       {activeTab === 'attendance' && (
         <div className="space-y-4">
+          {/* Filters */}
           <div className="flex flex-wrap gap-2 items-center">
-            <div className="relative flex-1 min-w-48">
+            <div className="relative flex-1 min-w-40">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
               <input
                 value={searchQ}
                 onChange={e => setSearchQ(e.target.value)}
-                placeholder="ค้นหาชื่อ, รหัส, แผนก..."
+                placeholder="ค้นหาชื่อ, รหัส..."
                 className="w-full pl-8 pr-3 py-1.5 text-sm rounded-lg border border-input bg-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
               />
             </div>
@@ -550,20 +555,15 @@ export function ShiftPage() {
             </select>
           </div>
 
-          <div className="bg-card border border-border rounded-xl overflow-hidden">
+          {/* Desktop table */}
+          <div className="hidden bg-card border border-border rounded-xl overflow-hidden md:block">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border bg-muted/40">
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">พนักงาน</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">วันที่</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">กะ</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">เข้า</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">ออก</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">ชั่วโมง</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">สาย</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">OT</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">สถานะ</th>
+                    {['พนักงาน', 'วันที่', 'กะ', 'เข้า', 'ออก', 'ชั่วโมง', 'สาย', 'OT', 'สถานะ'].map(col => (
+                      <th key={col} className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground whitespace-nowrap">{col}</th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
@@ -586,25 +586,19 @@ export function ShiftPage() {
                       <td className="px-4 py-3"><ShiftTypeBadge type={a.shiftType} /></td>
                       <td className="px-4 py-3">
                         <span className={cn('text-xs font-medium',
-                          a.punchIn
-                            ? (a.lateMinutes > 0 ? 'text-warning' : 'text-success')
-                            : 'text-muted-foreground')}>
+                          a.punchIn ? (a.lateMinutes > 0 ? 'text-warning' : 'text-success') : 'text-muted-foreground')}>
                           {a.punchIn ?? '—'}
                         </span>
                         <p className="text-[10px] text-muted-foreground">กำหนด {a.scheduledIn}</p>
                       </td>
                       <td className="px-4 py-3">
                         <span className={cn('text-xs font-medium',
-                          a.punchOut
-                            ? (a.overtimeMinutes > 0 ? 'text-primary' : 'text-success')
-                            : 'text-muted-foreground')}>
+                          a.punchOut ? (a.overtimeMinutes > 0 ? 'text-primary' : 'text-success') : 'text-muted-foreground')}>
                           {a.punchOut ?? '—'}
                         </span>
                         <p className="text-[10px] text-muted-foreground">กำหนด {a.scheduledOut}</p>
                       </td>
-                      <td className="px-4 py-3 text-xs text-foreground font-medium">
-                        {formatMinutes(a.workMinutes)}
-                      </td>
+                      <td className="px-4 py-3 text-xs text-foreground font-medium">{formatMinutes(a.workMinutes)}</td>
                       <td className="px-4 py-3">
                         {a.lateMinutes > 0
                           ? <span className="text-xs text-warning font-medium">{a.lateMinutes} น.</span>
@@ -628,15 +622,48 @@ export function ShiftPage() {
               </p>
             </div>
           </div>
+
+          {/* Mobile cards */}
+          <div className="space-y-3 md:hidden">
+            {filteredAttendance.length === 0 ? (
+              <p className="py-8 text-center text-sm text-muted-foreground">ไม่พบข้อมูลที่ตรงกับการค้นหา</p>
+            ) : filteredAttendance.map(a => (
+              <div key={a.id} className={cn(
+                'rounded-xl border bg-card p-4 shadow-sm',
+                a.status === 'absent' ? 'border-destructive/30' :
+                a.status === 'late'   ? 'border-warning/30' : 'border-border',
+              )}>
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <div>
+                    <p className="font-medium text-foreground text-sm">{a.employeeName}</p>
+                    <p className="text-xs text-muted-foreground">{a.employeeCode} · {a.department}</p>
+                  </div>
+                  <AttendanceStatusBadge status={a.status} />
+                </div>
+                <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground mb-2">
+                  <ShiftTypeBadge type={a.shiftType} />
+                  <span>{a.date}</span>
+                </div>
+                <PunchTimeline record={a} />
+                <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1">
+                  <PunchStatusBadge status={a.punchStatus} />
+                  {a.lateMinutes > 0 && <span className="text-xs text-warning">สาย {a.lateMinutes} น.</span>}
+                  {a.overtimeMinutes > 0 && <span className="text-xs text-primary">OT {formatMinutes(a.overtimeMinutes)}</span>}
+                  <span className="ml-auto text-xs text-muted-foreground">{formatMinutes(a.workMinutes)}</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
       {/* ── Schedule ─────────────────────────────────────────── */}
       {activeTab === 'schedule' && (
         <div className="space-y-4">
+          {/* Shift type summary */}
           <div className="grid grid-cols-3 gap-3">
-            <div className="bg-card border border-border rounded-xl p-4 flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10">
+            <div className="bg-card border border-border rounded-xl p-3 flex items-center gap-2 lg:gap-3 lg:p-4">
+              <div className="p-2 rounded-lg bg-primary/10 shrink-0">
                 <Sun className="size-4 text-primary" />
               </div>
               <div>
@@ -644,8 +671,8 @@ export function ShiftPage() {
                 <p className="text-xs text-muted-foreground">กะเช้า</p>
               </div>
             </div>
-            <div className="bg-card border border-border rounded-xl p-4 flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-warning/10">
+            <div className="bg-card border border-border rounded-xl p-3 flex items-center gap-2 lg:gap-3 lg:p-4">
+              <div className="p-2 rounded-lg bg-warning/10 shrink-0">
                 <Sunset className="size-4 text-warning" />
               </div>
               <div>
@@ -653,8 +680,8 @@ export function ShiftPage() {
                 <p className="text-xs text-muted-foreground">กะบ่าย</p>
               </div>
             </div>
-            <div className="bg-card border border-border rounded-xl p-4 flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-muted">
+            <div className="bg-card border border-border rounded-xl p-3 flex items-center gap-2 lg:gap-3 lg:p-4">
+              <div className="p-2 rounded-lg bg-muted shrink-0">
                 <Moon className="size-4 text-muted-foreground" />
               </div>
               <div>
@@ -667,19 +694,18 @@ export function ShiftPage() {
           <ScheduleGantt />
 
           <div className="bg-card border border-border rounded-xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-border flex items-center justify-between">
+            <div className="px-4 py-4 border-b border-border flex items-center justify-between lg:px-5">
               <h3 className="text-sm font-semibold text-foreground">รายการมอบหมาย Shift</h3>
               <button className="text-xs text-primary hover:underline">+ มอบหมาย Shift ใหม่</button>
             </div>
-            <div className="overflow-x-auto">
+            {/* Desktop table */}
+            <div className="hidden overflow-x-auto md:block">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border bg-muted/40">
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">พนักงาน</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">แผนก</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">วันที่</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">กะ</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">เวลา</th>
+                    {['พนักงาน', 'แผนก', 'วันที่', 'กะ', 'เวลา'].map(col => (
+                      <th key={col} className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">{col}</th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
@@ -692,13 +718,27 @@ export function ShiftPage() {
                       <td className="px-4 py-3 text-xs text-muted-foreground">{a.department}</td>
                       <td className="px-4 py-3 text-xs text-foreground">{a.date}</td>
                       <td className="px-4 py-3"><ShiftTypeBadge type={a.shiftType} /></td>
-                      <td className="px-4 py-3 text-xs text-foreground font-mono">
-                        {a.startTime} – {a.endTime}
-                      </td>
+                      <td className="px-4 py-3 text-xs text-foreground font-mono">{a.startTime} – {a.endTime}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
+            {/* Mobile list */}
+            <div className="divide-y divide-border md:hidden">
+              {mockShiftAssignments.map(a => (
+                <div key={a.id} className="flex items-center justify-between gap-3 p-4">
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-foreground">{a.employeeName}</p>
+                    <p className="text-xs text-muted-foreground">{a.employeeCode} · {a.department}</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">{a.date}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <ShiftTypeBadge type={a.shiftType} />
+                    <p className="mt-1 text-xs font-mono text-foreground">{a.startTime}–{a.endTime}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

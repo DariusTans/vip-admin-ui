@@ -10,6 +10,7 @@ import {
   Plus,
   Filter,
   Download,
+  ChevronRight,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { mockVisitors, mockStats, mockHourlyData, type Visitor } from '@/mocks/visitors'
@@ -26,14 +27,14 @@ interface StatCardProps {
 
 function StatCard({ label, value, icon, colorClass, bgClass, sub }: StatCardProps) {
   return (
-    <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">{label}</p>
-          <p className="mt-1 text-3xl font-bold text-foreground">{value}</p>
-          {sub && <p className="mt-1 text-xs text-muted-foreground">{sub}</p>}
+    <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <p className="text-xs text-muted-foreground">{label}</p>
+          <p className="mt-1 text-2xl font-bold text-foreground">{value}</p>
+          {sub && <p className="mt-0.5 hidden text-xs text-muted-foreground sm:block">{sub}</p>}
         </div>
-        <div className={cn('flex size-11 items-center justify-center rounded-xl', bgClass, colorClass)}>
+        <div className={cn('flex size-10 shrink-0 items-center justify-center rounded-xl', bgClass, colorClass)}>
           {icon}
         </div>
       </div>
@@ -45,9 +46,9 @@ function StatCard({ label, value, icon, colorClass, bgClass, sub }: StatCardProp
 function StatusBadge({ status }: { status: Visitor['status'] }) {
   const { t } = useTranslation()
   const map = {
-    'checked-in': { label: t('vms.checkedIn'), className: 'bg-success-soft text-success' },
+    'checked-in':  { label: t('vms.checkedIn'),  className: 'bg-success-soft text-success' },
     'checked-out': { label: t('vms.checkedOut'), className: 'bg-muted text-muted-foreground' },
-    'pending': { label: t('vms.pending'), className: 'bg-warning-soft text-warning' },
+    'pending':     { label: t('vms.pending'),    className: 'bg-warning-soft text-warning' },
   }
   const { label, className } = map[status]
   return (
@@ -68,7 +69,6 @@ function HourlyChart() {
             className="w-full rounded-sm bg-primary/20 transition-all group-hover:bg-primary/40"
             style={{ height: `${(d.count / max) * 100}%` }}
           />
-          {/* Tooltip on hover */}
           <div className="absolute -top-7 hidden rounded bg-foreground px-1.5 py-0.5 text-xs text-background group-hover:block whitespace-nowrap">
             {d.hour}: {d.count}
           </div>
@@ -100,25 +100,26 @@ export function VmsPage() {
   })
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 lg:space-y-6">
       {/* Page header */}
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">{t('nav.vms')}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">{todayStr}</p>
+          <h1 className="text-xl font-bold text-foreground lg:text-2xl">{t('nav.vms')}</h1>
+          <p className="mt-0.5 text-xs text-muted-foreground lg:text-sm">{todayStr}</p>
         </div>
-        <button className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-sm hover:opacity-90 transition-opacity">
-          <Plus className="size-4" />
-          {t('vms.registerVisitor')}
+        <button className="flex shrink-0 items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-primary-foreground shadow-sm hover:opacity-90 transition-opacity lg:px-4 lg:py-2.5 lg:text-sm">
+          <Plus className="size-3.5 lg:size-4" />
+          <span className="hidden sm:inline">{t('vms.registerVisitor')}</span>
+          <span className="sm:hidden">เพิ่ม</span>
         </button>
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4 lg:gap-4">
         <StatCard
           label={t('vms.totalToday')}
           value={mockStats.totalToday}
-          icon={<Users className="size-5" />}
+          icon={<Users className="size-4 lg:size-5" />}
           colorClass="text-primary"
           bgClass="bg-primary-soft"
           sub={`${t('vms.thisWeek')}: ${mockStats.totalThisWeek}`}
@@ -126,7 +127,7 @@ export function VmsPage() {
         <StatCard
           label={t('vms.checkedIn')}
           value={mockStats.checkedIn}
-          icon={<UserCheck className="size-5" />}
+          icon={<UserCheck className="size-4 lg:size-5" />}
           colorClass="text-success"
           bgClass="bg-success-soft"
           sub={t('vms.currentlyInside')}
@@ -134,14 +135,14 @@ export function VmsPage() {
         <StatCard
           label={t('vms.checkedOut')}
           value={mockStats.checkedOut}
-          icon={<UserX className="size-5" />}
+          icon={<UserX className="size-4 lg:size-5" />}
           colorClass="text-muted-foreground"
           bgClass="bg-muted"
         />
         <StatCard
           label={t('vms.pending')}
           value={mockStats.pending}
-          icon={<Clock className="size-5" />}
+          icon={<Clock className="size-4 lg:size-5" />}
           colorClass="text-warning"
           bgClass="bg-warning-soft"
           sub={t('vms.waitingApproval')}
@@ -151,8 +152,8 @@ export function VmsPage() {
       {/* Chart + summary row */}
       <div className="grid gap-4 xl:grid-cols-3">
         {/* Hourly traffic */}
-        <div className="xl:col-span-2 rounded-xl border border-border bg-card p-5 shadow-sm">
-          <div className="mb-4 flex items-center justify-between">
+        <div className="xl:col-span-2 rounded-xl border border-border bg-card p-4 shadow-sm lg:p-5">
+          <div className="mb-4 flex flex-wrap items-start justify-between gap-2">
             <div>
               <p className="font-semibold text-foreground">{t('vms.hourlyTraffic')}</p>
               <p className="text-xs text-muted-foreground">{t('vms.visitorsByHour')}</p>
@@ -171,14 +172,14 @@ export function VmsPage() {
         </div>
 
         {/* Monthly summary */}
-        <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+        <div className="rounded-xl border border-border bg-card p-4 shadow-sm lg:p-5">
           <p className="font-semibold text-foreground">{t('vms.summary')}</p>
-          <p className="text-xs text-muted-foreground mb-4">{t('vms.thisMonth')}</p>
+          <p className="mb-4 text-xs text-muted-foreground">{t('vms.thisMonth')}</p>
           <div className="space-y-3">
             {[
-              { label: t('vms.totalToday'), value: mockStats.totalToday, pct: 100 },
-              { label: t('vms.thisWeek'), value: mockStats.totalThisWeek, pct: 72 },
-              { label: t('vms.thisMonth'), value: mockStats.totalThisMonth, pct: 48 },
+              { label: t('vms.totalToday'),  value: mockStats.totalToday,      pct: 100 },
+              { label: t('vms.thisWeek'),     value: mockStats.totalThisWeek,   pct: 72 },
+              { label: t('vms.thisMonth'),    value: mockStats.totalThisMonth,  pct: 48 },
             ].map(item => (
               <div key={item.label} className="space-y-1.5">
                 <div className="flex justify-between text-sm">
@@ -197,49 +198,50 @@ export function VmsPage() {
         </div>
       </div>
 
-      {/* Visitor table */}
+      {/* Visitor list */}
       <div className="rounded-xl border border-border bg-card shadow-sm">
-        {/* Table toolbar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4">
-          <p className="font-semibold text-foreground">{t('vms.visitorList')}</p>
-          <div className="flex items-center gap-2">
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
-              <input
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                placeholder={t('vms.searchPlaceholder')}
-                className="h-9 rounded-lg border border-input bg-background pl-8 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring w-52"
-              />
+        {/* Toolbar */}
+        <div className="space-y-3 border-b border-border p-4">
+          <div className="flex items-center justify-between gap-3">
+            <p className="font-semibold text-foreground">{t('vms.visitorList')}</p>
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder={t('vms.searchPlaceholder')}
+                  className="h-8 w-36 rounded-lg border border-input bg-background pl-8 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring sm:w-52"
+                />
+              </div>
+              <button className="hidden items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground hover:bg-accent transition-colors sm:flex">
+                <Download className="size-3.5" />
+                {t('vms.export')}
+              </button>
             </div>
-            {/* Filter status */}
-            <div className="flex items-center gap-1">
-              <Filter className="size-3.5 text-muted-foreground" />
-              {(['all', 'checked-in', 'pending', 'checked-out'] as const).map(s => (
-                <button
-                  key={s}
-                  onClick={() => setFilterStatus(s)}
-                  className={cn(
-                    'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
-                    filterStatus === s
-                      ? 'bg-primary text-primary-foreground'
-                      : 'text-muted-foreground hover:bg-accent',
-                  )}
-                >
-                  {s === 'all' ? t('vms.all') : s === 'checked-in' ? t('vms.checkedIn') : s === 'pending' ? t('vms.pending') : t('vms.checkedOut')}
-                </button>
-              ))}
-            </div>
-            <button className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground hover:bg-accent transition-colors">
-              <Download className="size-3.5" />
-              {t('vms.export')}
-            </button>
+          </div>
+          {/* Filter chips */}
+          <div className="flex flex-wrap items-center gap-1.5">
+            <Filter className="size-3.5 shrink-0 text-muted-foreground" />
+            {(['all', 'checked-in', 'pending', 'checked-out'] as const).map(s => (
+              <button
+                key={s}
+                onClick={() => setFilterStatus(s)}
+                className={cn(
+                  'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
+                  filterStatus === s
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:bg-accent',
+                )}
+              >
+                {s === 'all' ? t('vms.all') : s === 'checked-in' ? t('vms.checkedIn') : s === 'pending' ? t('vms.pending') : t('vms.checkedOut')}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Table */}
-        <div className="overflow-x-auto">
+        {/* Desktop table */}
+        <div className="hidden overflow-x-auto md:block">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-muted/40">
@@ -273,9 +275,7 @@ export function VmsPage() {
                         ? new Date(v.checkOut).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })
                         : '—'}
                     </td>
-                    <td className="px-4 py-3">
-                      <StatusBadge status={v.status} />
-                    </td>
+                    <td className="px-4 py-3"><StatusBadge status={v.status} /></td>
                   </tr>
                 ))
               )}
@@ -283,7 +283,30 @@ export function VmsPage() {
           </table>
         </div>
 
-        {/* Table footer */}
+        {/* Mobile cards */}
+        <div className="divide-y divide-border md:hidden">
+          {filtered.length === 0 ? (
+            <p className="py-10 text-center text-sm text-muted-foreground">{t('vms.noResults')}</p>
+          ) : filtered.map(v => (
+            <div key={v.id} className="flex items-center gap-3 p-4">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <p className="font-medium text-foreground">{v.name}</p>
+                  <StatusBadge status={v.status} />
+                </div>
+                <p className="mt-0.5 text-xs text-muted-foreground">{v.company} · {v.purpose}</p>
+                <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-muted-foreground">
+                  <span>พบ: {v.host} ชั้น {v.floor}</span>
+                  <span>เข้า: {new Date(v.checkIn).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</span>
+                  {v.checkOut && <span>ออก: {new Date(v.checkOut).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</span>}
+                </div>
+              </div>
+              <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
+            </div>
+          ))}
+        </div>
+
+        {/* Footer */}
         <div className="flex items-center justify-between border-t border-border px-4 py-3 text-xs text-muted-foreground">
           <span>{t('vms.showing', { count: filtered.length, total: mockVisitors.length })}</span>
         </div>

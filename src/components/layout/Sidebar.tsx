@@ -12,6 +12,7 @@ import {
   LayoutDashboard,
   ChevronLeft,
   ChevronRight,
+  X,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
@@ -27,14 +28,18 @@ const NAV_ITEMS = [
   { key: 'payroll', path: '/payroll', icon: Banknote },
 ] as const
 
-export function Sidebar() {
+interface SidebarProps {
+  onClose?: () => void
+}
+
+export function Sidebar({ onClose }: SidebarProps) {
   const { t } = useTranslation()
   const [collapsed, setCollapsed] = useState(false)
 
   return (
     <aside
       className={cn(
-        'relative flex flex-col border-r border-sidebar-border bg-sidebar transition-all duration-300',
+        'relative flex h-full flex-col border-r border-sidebar-border bg-sidebar transition-all duration-300',
         collapsed ? 'w-16' : 'w-60',
       )}
     >
@@ -42,9 +47,19 @@ export function Sidebar() {
       <div className={cn('flex h-16 items-center border-b border-sidebar-border px-4', collapsed && 'justify-center px-0')}>
         <LayoutDashboard className="size-6 shrink-0 text-sidebar-primary" />
         {!collapsed && (
-          <span className="ml-2 text-sm font-semibold text-sidebar-foreground">
+          <span className="ml-2 flex-1 text-sm font-semibold text-sidebar-foreground">
             {t('app.name')}
           </span>
+        )}
+        {/* Close button — mobile only */}
+        {!collapsed && (
+          <button
+            onClick={onClose}
+            className="ml-auto rounded-md p-1 text-sidebar-foreground hover:bg-sidebar-accent/60 lg:hidden"
+            aria-label="Close menu"
+          >
+            <X className="size-4" />
+          </button>
         )}
       </div>
 
@@ -55,6 +70,7 @@ export function Sidebar() {
             key={key}
             to={path}
             title={collapsed ? t(`nav.${key}`) : undefined}
+            onClick={onClose}
             className={({ isActive }) =>
               cn(
                 'flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors',
@@ -71,10 +87,10 @@ export function Sidebar() {
         ))}
       </nav>
 
-      {/* Collapse toggle */}
+      {/* Collapse toggle — desktop only */}
       <button
         onClick={() => setCollapsed(p => !p)}
-        className="flex h-10 items-center justify-center border-t border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent/60 transition-colors"
+        className="hidden lg:flex h-10 items-center justify-center border-t border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent/60 transition-colors"
         aria-label="Toggle sidebar"
       >
         {collapsed ? <ChevronRight className="size-4" /> : <ChevronLeft className="size-4" />}

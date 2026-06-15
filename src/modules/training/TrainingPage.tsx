@@ -13,20 +13,20 @@ import {
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const CATEGORY_MAP: Record<CourseCategory, { label: string; cls: string }> = {
-  safety:     { label: 'ความปลอดภัย',   cls: 'bg-success-soft text-success' },
+  safety:     { label: 'ความปลอดภัย',      cls: 'bg-success-soft text-success' },
   security:   { label: 'รักษาความปลอดภัย', cls: 'bg-primary-soft text-primary' },
-  fire:       { label: 'ดับเพลิง',      cls: 'bg-destructive-soft text-destructive' },
-  'first-aid':{ label: 'ปฐมพยาบาล',    cls: 'bg-warning-soft text-warning' },
-  compliance: { label: 'กฎหมาย/ระเบียบ', cls: 'bg-muted text-muted-foreground' },
-  technical:  { label: 'เทคนิค',        cls: 'bg-secondary text-secondary-foreground' },
+  fire:       { label: 'ดับเพลิง',          cls: 'bg-destructive-soft text-destructive' },
+  'first-aid':{ label: 'ปฐมพยาบาล',        cls: 'bg-warning-soft text-warning' },
+  compliance: { label: 'กฎหมาย/ระเบียบ',   cls: 'bg-muted text-muted-foreground' },
+  technical:  { label: 'เทคนิค',            cls: 'bg-secondary text-secondary-foreground' },
 }
 
 const ENROLLMENT_STATUS_MAP: Record<EnrollmentStatus, { label: string; cls: string; icon: React.ElementType }> = {
-  enrolled:    { label: 'ลงทะเบียน',    cls: 'bg-muted text-muted-foreground',         icon: Calendar },
-  'in-progress':{ label: 'กำลังเรียน',  cls: 'bg-primary-soft text-primary',           icon: Clock },
-  completed:   { label: 'ผ่านแล้ว',     cls: 'bg-success-soft text-success',           icon: CheckCircle2 },
-  failed:      { label: 'ไม่ผ่าน',      cls: 'bg-destructive-soft text-destructive',   icon: XCircle },
-  cancelled:   { label: 'ยกเลิก',       cls: 'bg-muted text-muted-foreground',         icon: XCircle },
+  enrolled:     { label: 'ลงทะเบียน',  cls: 'bg-muted text-muted-foreground',       icon: Calendar },
+  'in-progress':{ label: 'กำลังเรียน', cls: 'bg-primary-soft text-primary',         icon: Clock },
+  completed:    { label: 'ผ่านแล้ว',   cls: 'bg-success-soft text-success',         icon: CheckCircle2 },
+  failed:       { label: 'ไม่ผ่าน',    cls: 'bg-destructive-soft text-destructive', icon: XCircle },
+  cancelled:    { label: 'ยกเลิก',     cls: 'bg-muted text-muted-foreground',       icon: XCircle },
 }
 
 function CategoryBadge({ category }: { category: CourseCategory }) {
@@ -88,7 +88,7 @@ function StatCard({
   }[variant]
 
   return (
-    <div className={cn('rounded-xl p-4 flex flex-col gap-3', variantCls)}>
+    <div className={cn('rounded-xl p-4 flex flex-col gap-2', variantCls)}>
       <div className="flex items-start justify-between">
         <div className={cn('p-2 rounded-lg', iconCls)}>
           <Icon className="size-4" />
@@ -102,9 +102,9 @@ function StatCard({
         )}
       </div>
       <div>
-        <p className="text-2xl font-semibold text-foreground">{value}</p>
+        <p className="text-xl font-semibold text-foreground lg:text-2xl">{value}</p>
         <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
-        {sub && <p className="text-xs text-muted-foreground/70 mt-0.5">{sub}</p>}
+        {sub && <p className="hidden text-xs text-muted-foreground/70 mt-0.5 sm:block">{sub}</p>}
       </div>
     </div>
   )
@@ -120,7 +120,7 @@ function CourseCard({ course }: { course: Course }) {
 
   return (
     <div className={cn(
-      'bg-card border border-border rounded-xl p-5 flex flex-col gap-4 hover:shadow-md transition-shadow',
+      'bg-card border border-border rounded-xl p-4 flex flex-col gap-3 hover:shadow-md transition-shadow lg:p-5 lg:gap-4',
       course.status === 'draft' && 'opacity-70',
     )}>
       <div className="flex items-start justify-between gap-2">
@@ -137,7 +137,6 @@ function CourseCard({ course }: { course: Course }) {
         </div>
       </div>
 
-      {/* Completion bar */}
       <div>
         <div className="flex items-center justify-between text-[10px] text-muted-foreground mb-1">
           <span>ผ่านหลักสูตร</span>
@@ -187,7 +186,7 @@ function CourseCard({ course }: { course: Course }) {
 
 function UpcomingEvents() {
   return (
-    <div className="bg-card border border-border rounded-xl p-5">
+    <div className="bg-card border border-border rounded-xl p-4 lg:p-5">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-semibold text-foreground">ตารางอบรมที่กำลังจะมาถึง</h3>
         <button className="text-xs text-primary hover:underline flex items-center gap-0.5">
@@ -244,7 +243,7 @@ function PassRateChart() {
   }).filter(d => d.total > 0)
 
   return (
-    <div className="bg-card border border-border rounded-xl p-5">
+    <div className="bg-card border border-border rounded-xl p-4 lg:p-5">
       <div className="flex items-center gap-2 mb-4">
         <BarChart2 className="size-4 text-muted-foreground" />
         <h3 className="text-sm font-semibold text-foreground">อัตราผ่านรายหมวด</h3>
@@ -283,9 +282,9 @@ const TABS: { id: TabId; label: string }[] = [
 ]
 
 export function TrainingPage() {
-  const [activeTab, setActiveTab] = useState<TabId>('overview')
-  const [searchQ, setSearchQ]     = useState('')
-  const [filterCat, setFilterCat] = useState<CourseCategory | 'all'>('all')
+  const [activeTab, setActiveTab]       = useState<TabId>('overview')
+  const [searchQ, setSearchQ]           = useState('')
+  const [filterCat, setFilterCat]       = useState<CourseCategory | 'all'>('all')
   const [filterStatus, setFilterStatus] = useState<EnrollmentStatus | 'all'>('all')
 
   const filteredEnrollments = mockEnrollments.filter(e => {
@@ -305,18 +304,19 @@ export function TrainingPage() {
   })
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-4 lg:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold text-foreground">Training Course</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
+          <h1 className="text-xl font-bold text-foreground lg:text-2xl">Training Course</h1>
+          <p className="mt-0.5 text-xs text-muted-foreground lg:text-sm">
             จัดการหลักสูตรและติดตามผลการอบรม · อัปเดต 15 มิ.ย. 2026
           </p>
         </div>
-        <button className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg border border-border text-muted-foreground hover:bg-muted/50 transition-colors">
+        <button className="flex shrink-0 items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-xs text-muted-foreground hover:bg-muted/50 transition-colors lg:text-sm lg:px-4">
           <BookOpen className="size-4" />
-          + เพิ่มหลักสูตร
+          <span className="hidden sm:inline">+ เพิ่มหลักสูตร</span>
+          <span className="sm:hidden">เพิ่ม</span>
         </button>
       </div>
 
@@ -345,7 +345,7 @@ export function TrainingPage() {
           variant="success"
         />
         <StatCard
-          label="ใบรับรองหมดอายุเร็วๆ นี้"
+          label="ใบรับรองหมดอายุ"
           value={mockTrainingStats.expiringSoon}
           sub="ภายใน 30 วัน"
           icon={AlertTriangle}
@@ -354,13 +354,13 @@ export function TrainingPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 border-b border-border">
+      <div className="flex gap-1 border-b border-border overflow-x-auto">
         {TABS.map(t => (
           <button
             key={t.id}
             onClick={() => setActiveTab(t.id)}
             className={cn(
-              'px-4 py-2 text-sm font-medium border-b-2 transition-colors',
+              'whitespace-nowrap px-3 py-2 text-sm font-medium border-b-2 transition-colors lg:px-4',
               activeTab === t.id
                 ? 'border-primary text-primary'
                 : 'border-transparent text-muted-foreground hover:text-foreground',
@@ -374,17 +374,16 @@ export function TrainingPage() {
       {/* ── Overview ─────────────────────────────────────────── */}
       {activeTab === 'overview' && (
         <div className="space-y-4">
-          {/* Summary row */}
-          <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
             {/* Quick stats */}
-            <div className="bg-card border border-border rounded-xl p-5 flex flex-col gap-4">
+            <div className="bg-card border border-border rounded-xl p-4 flex flex-col gap-4 lg:p-5">
               <h3 className="text-sm font-semibold text-foreground">สรุปภาพรวม</h3>
               <div className="space-y-3">
                 {[
-                  { label: 'ลงทะเบียนทั้งหมด',  value: mockTrainingStats.totalEnrollments, color: 'text-foreground' },
-                  { label: 'กำลังอบรม',          value: mockTrainingStats.inProgressCount,  color: 'text-primary' },
-                  { label: 'ผ่านแล้ว (รวม)',     value: mockTrainingStats.completedThisMonth + 35, color: 'text-success' },
-                  { label: 'ใบรับรองที่ออก',     value: mockTrainingStats.certificatesIssued, color: 'text-foreground' },
+                  { label: 'ลงทะเบียนทั้งหมด', value: mockTrainingStats.totalEnrollments,                          color: 'text-foreground' },
+                  { label: 'กำลังอบรม',         value: mockTrainingStats.inProgressCount,                          color: 'text-primary' },
+                  { label: 'ผ่านแล้ว (รวม)',    value: mockTrainingStats.completedThisMonth + 35,                  color: 'text-success' },
+                  { label: 'ใบรับรองที่ออก',    value: mockTrainingStats.certificatesIssued,                       color: 'text-foreground' },
                 ].map(item => (
                   <div key={item.label} className="flex items-center justify-between">
                     <span className="text-xs text-muted-foreground">{item.label}</span>
@@ -392,7 +391,6 @@ export function TrainingPage() {
                   </div>
                 ))}
               </div>
-
               <div className="border-t border-border pt-3">
                 <p className="text-xs text-muted-foreground mb-2">สถานะการอบรม</p>
                 {(['completed', 'in-progress', 'enrolled', 'failed'] as EnrollmentStatus[]).map(s => {
@@ -401,29 +399,26 @@ export function TrainingPage() {
                   const { label, cls } = ENROLLMENT_STATUS_MAP[s]
                   return (
                     <div key={s} className="flex items-center gap-2 mb-1.5">
-                      <div className="w-16 shrink-0">
+                      <div className="w-20 shrink-0">
                         <span className={cn('text-[10px] px-1.5 py-0.5 rounded-full font-medium', cls)}>{label}</span>
                       </div>
                       <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
                         <div className="h-full bg-current rounded-full opacity-50" style={{ width: `${pct}%` }} />
                       </div>
-                      <span className="text-[10px] text-muted-foreground w-8 text-right">{count}</span>
+                      <span className="text-[10px] text-muted-foreground w-6 text-right">{count}</span>
                     </div>
                   )
                 })}
               </div>
             </div>
 
-            {/* Pass rate chart */}
             <PassRateChart />
-
-            {/* Upcoming events */}
             <UpcomingEvents />
           </div>
 
           {/* Certificates expiring */}
           <div className="bg-card border border-border rounded-xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-border flex items-center justify-between">
+            <div className="px-4 py-4 border-b border-border flex items-center justify-between lg:px-5">
               <div className="flex items-center gap-2">
                 <AlertTriangle className="size-4 text-warning" />
                 <h3 className="text-sm font-semibold text-foreground">ใบรับรองที่ใกล้หมดอายุ (ภายใน 365 วัน)</h3>
@@ -436,7 +431,7 @@ export function TrainingPage() {
                 )
                 const urgent = daysLeft <= 90
                 return (
-                  <div key={e.id} className={cn('flex items-center gap-4 px-5 py-3', urgent && 'bg-warning-soft/30')}>
+                  <div key={e.id} className={cn('flex items-center gap-4 px-4 py-3 lg:px-5', urgent && 'bg-warning-soft/30')}>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-semibold text-foreground">{e.employeeName}
                         <span className="text-[10px] text-muted-foreground ml-2">{e.employeeCode}</span>
@@ -461,12 +456,12 @@ export function TrainingPage() {
       {activeTab === 'courses' && (
         <div className="space-y-4">
           <div className="flex flex-wrap gap-2 items-center">
-            <div className="relative flex-1 min-w-48">
+            <div className="relative flex-1 min-w-40">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
               <input
                 value={searchQ}
                 onChange={e => setSearchQ(e.target.value)}
-                placeholder="ค้นหาหลักสูตร, รหัส..."
+                placeholder="ค้นหาหลักสูตร..."
                 className="w-full pl-8 pr-3 py-1.5 text-sm rounded-lg border border-input bg-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
               />
             </div>
@@ -487,7 +482,7 @@ export function TrainingPage() {
               ไม่พบหลักสูตรที่ตรงกับการค้นหา
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 lg:gap-4">
               {filteredCourses.map(c => <CourseCard key={c.id} course={c} />)}
             </div>
           )}
@@ -498,7 +493,7 @@ export function TrainingPage() {
       {activeTab === 'enrollments' && (
         <div className="space-y-4">
           <div className="flex flex-wrap gap-2 items-center">
-            <div className="relative flex-1 min-w-48">
+            <div className="relative flex-1 min-w-40">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
               <input
                 value={searchQ}
@@ -530,19 +525,15 @@ export function TrainingPage() {
             </select>
           </div>
 
-          <div className="bg-card border border-border rounded-xl overflow-hidden">
+          {/* Desktop table */}
+          <div className="hidden bg-card border border-border rounded-xl overflow-hidden md:block">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border bg-muted/40">
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">พนักงาน</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">หลักสูตร</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">หมวด</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">วันที่อบรม</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">คะแนน</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">สถานะ</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">ใบรับรอง</th>
-                    <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground">หมดอายุ</th>
+                    {['พนักงาน', 'หลักสูตร', 'หมวด', 'วันที่อบรม', 'คะแนน', 'สถานะ', 'ใบรับรอง', 'หมดอายุ'].map(col => (
+                      <th key={col} className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground whitespace-nowrap">{col}</th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
@@ -566,9 +557,7 @@ export function TrainingPage() {
                         <p className="text-[10px] font-mono text-muted-foreground">{e.courseCode}</p>
                       </td>
                       <td className="px-4 py-3"><CategoryBadge category={e.category} /></td>
-                      <td className="px-4 py-3 text-xs text-foreground">
-                        {e.completedAt ?? e.startedAt ?? e.enrolledAt}
-                      </td>
+                      <td className="px-4 py-3 text-xs text-foreground">{e.completedAt ?? e.startedAt ?? e.enrolledAt}</td>
                       <td className="px-4 py-3">
                         <ScorePill score={e.score} passingScore={e.passingScore} />
                         <p className="text-[10px] text-muted-foreground">เกณฑ์: {e.passingScore}</p>
@@ -603,6 +592,45 @@ export function TrainingPage() {
                 ไม่ผ่าน: {filteredEnrollments.filter(e => e.status === 'failed').length}
               </p>
             </div>
+          </div>
+
+          {/* Mobile cards */}
+          <div className="space-y-3 md:hidden">
+            {filteredEnrollments.length === 0 ? (
+              <p className="py-8 text-center text-sm text-muted-foreground">ไม่พบข้อมูลที่ตรงกับการค้นหา</p>
+            ) : filteredEnrollments.map(e => (
+              <div key={e.id} className={cn(
+                'rounded-xl border bg-card p-4 shadow-sm',
+                e.status === 'failed' ? 'border-destructive/30' : 'border-border',
+              )}>
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <div className="min-w-0">
+                    <p className="font-medium text-foreground text-sm">{e.employeeName}</p>
+                    <p className="text-xs text-muted-foreground">{e.employeeCode} · {e.department}</p>
+                  </div>
+                  <EnrollmentStatusBadge status={e.status} />
+                </div>
+                <p className="text-xs font-medium text-foreground">{e.courseName}</p>
+                <div className="mt-1 flex flex-wrap gap-2">
+                  <CategoryBadge category={e.category} />
+                  <span className="text-xs text-muted-foreground">{e.completedAt ?? e.startedAt ?? e.enrolledAt}</span>
+                </div>
+                <div className="mt-2 flex items-center justify-between">
+                  <ScorePill score={e.score} passingScore={e.passingScore} />
+                  {e.certificateNo && (
+                    <span className="text-[10px] font-mono text-success">{e.certificateNo}</span>
+                  )}
+                  {e.expiresAt && (() => {
+                    const days = Math.round((new Date(e.expiresAt).getTime() - new Date('2026-06-15').getTime()) / 86400000)
+                    return (
+                      <span className={cn('text-xs font-medium', days <= 90 ? 'text-warning' : 'text-muted-foreground')}>
+                        {days <= 90 ? `หมดใน ${days} วัน` : e.expiresAt}
+                      </span>
+                    )
+                  })()}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
