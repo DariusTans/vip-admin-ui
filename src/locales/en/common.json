@@ -1,0 +1,64 @@
+{
+  "app": {
+    "name": "VIP Admin"
+  },
+  "nav": {
+    "vms": "Visitor Management",
+    "patrol": "Patrol Management",
+    "hr": "Human Resources",
+    "shift": "Shift & Attendance",
+    "training": "Training Course",
+    "stock": "Stock",
+    "billing": "Check & Billing",
+    "payroll": "Payroll"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "loginButton": "Sign In",
+    "loginFailed": "Invalid email or password",
+    "loggingIn": "Signing in..."
+  },
+  "common": {
+    "loading": "Loading...",
+    "comingSoon": "Coming Soon",
+    "underConstruction": "This module is under development"
+  },
+  "topbar": {
+    "toggleTheme": "Toggle Theme",
+    "toggleLang": "เปลี่ยนเป็นภาษาไทย"
+  },
+  "vms": {
+    "registerVisitor": "Register Visitor",
+    "totalToday": "Today's Visitors",
+    "checkedIn": "Checked In",
+    "checkedOut": "Checked Out",
+    "pending": "Pending",
+    "currentlyInside": "Currently inside",
+    "waitingApproval": "Waiting approval",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "hourlyTraffic": "Hourly Traffic",
+    "visitorsByHour": "Visitors by hour of day",
+    "peakHour": "Peak Hour",
+    "summary": "Overview",
+    "visitorList": "Visitor List",
+    "searchPlaceholder": "Search name, company or purpose...",
+    "all": "All",
+    "export": "Export",
+    "noResults": "No results found",
+    "showing": "Showing {{count}} of {{total}} entries",
+    "col": {
+      "name": "Name",
+      "company": "Company / Organization",
+      "purpose": "Purpose",
+      "host": "Host",
+      "floor": "Floor",
+      "checkIn": "Check In",
+      "checkOut": "Check Out",
+      "status": "Status"
+    }
+  }
+}

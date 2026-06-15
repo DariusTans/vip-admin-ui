@@ -1,0 +1,64 @@
+{
+  "app": {
+    "name": "VIP Admin"
+  },
+  "nav": {
+    "vms": "ระบบจัดการผู้เยี่ยมชม",
+    "patrol": "ระบบลาดตระเวน",
+    "hr": "ทรัพยากรบุคคล",
+    "shift": "กะ & เวลาทำงาน",
+    "training": "หลักสูตรฝึกอบรม",
+    "stock": "คลังสินค้า",
+    "billing": "ตรวจสอบ & เรียกเก็บ",
+    "payroll": "เงินเดือน"
+  },
+  "auth": {
+    "login": "เข้าสู่ระบบ",
+    "logout": "ออกจากระบบ",
+    "email": "อีเมล",
+    "password": "รหัสผ่าน",
+    "loginButton": "เข้าสู่ระบบ",
+    "loginFailed": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+    "loggingIn": "กำลังเข้าสู่ระบบ..."
+  },
+  "common": {
+    "loading": "กำลังโหลด...",
+    "comingSoon": "เร็วๆ นี้",
+    "underConstruction": "โมดูลนี้อยู่ระหว่างการพัฒนา"
+  },
+  "topbar": {
+    "toggleTheme": "สลับธีม",
+    "toggleLang": "Switch to English"
+  },
+  "vms": {
+    "registerVisitor": "ลงทะเบียนผู้เยี่ยมชม",
+    "totalToday": "ผู้เยี่ยมชมวันนี้",
+    "checkedIn": "อยู่ภายใน",
+    "checkedOut": "ออกแล้ว",
+    "pending": "รอดำเนินการ",
+    "currentlyInside": "ยังอยู่ภายในอาคาร",
+    "waitingApproval": "รอการอนุมัติ",
+    "thisWeek": "สัปดาห์นี้",
+    "thisMonth": "เดือนนี้",
+    "hourlyTraffic": "การเข้า-ออกรายชั่วโมง",
+    "visitorsByHour": "จำนวนผู้เยี่ยมชมแยกตามเวลา",
+    "peakHour": "ชั่วโมงเร่งด่วน",
+    "summary": "สรุปภาพรวม",
+    "visitorList": "รายการผู้เยี่ยมชม",
+    "searchPlaceholder": "ค้นหาชื่อ บริษัท หรือวัตถุประสงค์...",
+    "all": "ทั้งหมด",
+    "export": "ส่งออก",
+    "noResults": "ไม่พบข้อมูลที่ค้นหา",
+    "showing": "แสดง {{count}} จาก {{total}} รายการ",
+    "col": {
+      "name": "ชื่อ-นามสกุล",
+      "company": "บริษัท / องค์กร",
+      "purpose": "วัตถุประสงค์",
+      "host": "ผู้รับ",
+      "floor": "ชั้น",
+      "checkIn": "เวลาเข้า",
+      "checkOut": "เวลาออก",
+      "status": "สถานะ"
+    }
+  }
+}
